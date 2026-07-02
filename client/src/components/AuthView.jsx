@@ -429,7 +429,7 @@ const AuthView = ({ onAuthSuccess, onBackToHome }) => {
                 <input 
                   type="checkbox" 
                   checked={agreeTerms}
-                  onChange={(e) => setAgreeTerms(e.checked)}
+                  onChange={(e) => setAgreeTerms(e.target.checked)}
                   className="mt-1 w-4 h-4 rounded border-outline-variant text-primary focus:ring-0 cursor-pointer"
                 />
                 <p className="text-[11px] text-on-surface-variant font-medium leading-relaxed">
