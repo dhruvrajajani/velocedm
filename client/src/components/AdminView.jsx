@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import API_BASE from '../api';
 
 const AdminView = ({ currentUser, onLogout, onSelectType }) => {
   const [activeSubTab, setActiveSubTab] = useState('approvals'); // 'overview', 'approvals', 'users', 'transactions', 'settings'
@@ -28,7 +29,7 @@ const AdminView = ({ currentUser, onLogout, onSelectType }) => {
     setError('');
     try {
       // 1. Fetch listings
-      const listingsResponse = await fetch('http://localhost:5000/api/listings');
+      const listingsResponse = await fetch(`${API_BASE}/api/listings`);
       if (!listingsResponse.ok) {
         throw new Error('Failed to load listings data');
       }
@@ -36,14 +37,14 @@ const AdminView = ({ currentUser, onLogout, onSelectType }) => {
       setListings(listingsData);
 
       // 2. Fetch users
-      const usersResponse = await fetch('http://localhost:5000/api/auth/users');
+      const usersResponse = await fetch(`${API_BASE}/api/auth/users`);
       if (usersResponse.ok) {
         const usersData = await usersResponse.json();
         setUsers(usersData);
       }
 
       // 3. Fetch inquiries
-      const inquiriesResponse = await fetch('http://localhost:5000/api/inquiries');
+      const inquiriesResponse = await fetch(`${API_BASE}/api/inquiries`);
       if (inquiriesResponse.ok) {
         const inquiriesData = await inquiriesResponse.json();
         setInquiries(inquiriesData);
@@ -59,7 +60,7 @@ const AdminView = ({ currentUser, onLogout, onSelectType }) => {
   const handleApprove = async (id, title) => {
     setActionMessage('');
     try {
-      const response = await fetch(`http://localhost:5000/api/listings/${id}`, {
+      const response = await fetch(`${API_BASE}/api/listings/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isFeatured: true })
@@ -79,7 +80,7 @@ const AdminView = ({ currentUser, onLogout, onSelectType }) => {
     if (!window.confirm(`Are you sure you want to reject/delete listing "${title}"?`)) return;
     setActionMessage('');
     try {
-      const response = await fetch(`http://localhost:5000/api/listings/${id}`, {
+      const response = await fetch(`${API_BASE}/api/listings/${id}`, {
         method: 'DELETE'
       });
       if (!response.ok) {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import API_BASE from '../api';
 
 const DetailsView = ({ vehicleId, onBackToBrowse, onSelectVehicle }) => {
   const [vehicle, setVehicle] = useState(null);
@@ -30,7 +31,7 @@ const DetailsView = ({ vehicleId, onBackToBrowse, onSelectVehicle }) => {
     setError('');
     try {
       // 1. Fetch current vehicle details
-      const response = await fetch(`http://localhost:5000/api/listings/${vehicleId}`);
+      const response = await fetch(`${API_BASE}/api/listings/${vehicleId}`);
       if (!response.ok) {
         throw new Error('Failed to load vehicle details');
       }
@@ -43,7 +44,7 @@ const DetailsView = ({ vehicleId, onBackToBrowse, onSelectVehicle }) => {
 
       // 2. Fetch seller profile details
       try {
-        const sellerRes = await fetch(`http://localhost:5000/api/sellers/${encodeURIComponent(ownerEmail)}`);
+        const sellerRes = await fetch(`${API_BASE}/api/sellers/${encodeURIComponent(ownerEmail)}`);
         if (sellerRes.ok) {
           const sellerData = await sellerRes.json();
           setSellerInfo(sellerData);
@@ -54,7 +55,7 @@ const DetailsView = ({ vehicleId, onBackToBrowse, onSelectVehicle }) => {
 
       // 3. Fetch reviews for the seller
       try {
-        const reviewsRes = await fetch(`http://localhost:5000/api/reviews?seller=${encodeURIComponent(ownerEmail)}`);
+        const reviewsRes = await fetch(`${API_BASE}/api/reviews?seller=${encodeURIComponent(ownerEmail)}`);
         if (reviewsRes.ok) {
           const reviewsData = await reviewsRes.json();
           setReviewsList(reviewsData);
@@ -64,7 +65,7 @@ const DetailsView = ({ vehicleId, onBackToBrowse, onSelectVehicle }) => {
       }
 
       // 4. Fetch similar vehicles of the same type (limited to 3)
-      const similarResponse = await fetch(`http://localhost:5000/api/listings?type=${data.type}`);
+      const similarResponse = await fetch(`${API_BASE}/api/listings?type=${data.type}`);
       if (similarResponse.ok) {
         const similarData = await similarResponse.json();
         const filtered = similarData.filter(item => item._id !== vehicleId).slice(0, 3);
@@ -90,7 +91,7 @@ const DetailsView = ({ vehicleId, onBackToBrowse, onSelectVehicle }) => {
     }
     setSubmittingInquiry(true);
     try {
-      const response = await fetch('http://localhost:5000/api/inquiries', {
+      const response = await fetch(`${API_BASE}/api/inquiries`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -130,7 +131,7 @@ const DetailsView = ({ vehicleId, onBackToBrowse, onSelectVehicle }) => {
     setSubmittingReview(true);
     try {
       const ownerEmail = vehicle.owner || 'demo@veloce.com';
-      const response = await fetch('http://localhost:5000/api/reviews', {
+      const response = await fetch(`${API_BASE}/api/reviews`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -150,12 +151,12 @@ const DetailsView = ({ vehicleId, onBackToBrowse, onSelectVehicle }) => {
         setShowReviewForm(false);
 
         // Refetch seller and review details to update rating display
-        const sellerRes = await fetch(`http://localhost:5000/api/sellers/${encodeURIComponent(ownerEmail)}`);
+        const sellerRes = await fetch(`${API_BASE}/api/sellers/${encodeURIComponent(ownerEmail)}`);
         if (sellerRes.ok) {
           const sellerData = await sellerRes.json();
           setSellerInfo(sellerData);
         }
-        const reviewsRes = await fetch(`http://localhost:5000/api/reviews?seller=${encodeURIComponent(ownerEmail)}`);
+        const reviewsRes = await fetch(`${API_BASE}/api/reviews?seller=${encodeURIComponent(ownerEmail)}`);
         if (reviewsRes.ok) {
           const reviewsData = await reviewsRes.json();
           setReviewsList(reviewsData);

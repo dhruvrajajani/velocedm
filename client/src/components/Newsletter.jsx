@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import API_BASE from '../api';
 
 const Newsletter = () => {
   const [email, setEmail] = useState('');
@@ -15,7 +16,7 @@ const Newsletter = () => {
     setIsError(false);
 
     try {
-      const response = await fetch('http://localhost:5000/api/subscribers', {
+      const response = await fetch(`${API_BASE}/api/subscribers`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })

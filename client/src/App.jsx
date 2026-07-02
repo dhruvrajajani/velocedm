@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import API_BASE from './api';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import ListingsGrid from './components/ListingsGrid';
@@ -61,7 +62,7 @@ function App() {
         if (searchFilters.search) params.append('search', searchFilters.search);
       }
 
-      const response = await fetch(`http://localhost:5000/api/listings?${params.toString()}`);
+      const response = await fetch(`${API_BASE}/api/listings?${params.toString()}`);
       if (!response.ok) {
         throw new Error('Failed to load listings from database API');
       }

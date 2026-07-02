@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import API_BASE from '../api';
 
 const ListVehicleModal = ({ isOpen, onClose, onSuccess, currentUser }) => {
   const [formData, setFormData] = useState({
@@ -47,7 +48,7 @@ const ListVehicleModal = ({ isOpen, onClose, onSuccess, currentUser }) => {
         owner: currentUser ? currentUser.email : ''
       };
 
-      const response = await fetch('http://localhost:5000/api/listings', {
+      const response = await fetch(`${API_BASE}/api/listings`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

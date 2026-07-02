@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import API_BASE from '../api';
 
 const DashboardView = ({ currentUser, onLogout, onOpenListModal }) => {
   const [activeTab, setActiveTab] = useState('listings'); // 'listings', 'saved', 'inquiries', 'insights', 'settings'
@@ -22,7 +23,7 @@ const DashboardView = ({ currentUser, onLogout, onOpenListModal }) => {
     setError('');
     try {
       // 1. Fetch user listings
-      const listingsResponse = await fetch(`http://localhost:5000/api/listings?owner=${encodeURIComponent(currentUser.email)}`);
+      const listingsResponse = await fetch(`${API_BASE}/api/listings?owner=${encodeURIComponent(currentUser.email)}`);
       if (!listingsResponse.ok) {
         throw new Error('Failed to load dashboard listings');
       }
@@ -30,14 +31,14 @@ const DashboardView = ({ currentUser, onLogout, onOpenListModal }) => {
       setListings(listingsData);
 
       // 2. Fetch user inquiries
-      const inquiriesResponse = await fetch(`http://localhost:5000/api/inquiries?seller=${encodeURIComponent(currentUser.email)}`);
+      const inquiriesResponse = await fetch(`${API_BASE}/api/inquiries?seller=${encodeURIComponent(currentUser.email)}`);
       if (inquiriesResponse.ok) {
         const inquiriesData = await inquiriesResponse.json();
         setInquiries(inquiriesData);
       }
 
       // 3. Fetch seller profile details
-      const sellerRes = await fetch(`http://localhost:5000/api/sellers/${encodeURIComponent(currentUser.email)}`);
+      const sellerRes = await fetch(`${API_BASE}/api/sellers/${encodeURIComponent(currentUser.email)}`);
       if (sellerRes.ok) {
         const sellerData = await sellerRes.json();
         setBusinessName(sellerData.businessName || '');
@@ -58,7 +59,7 @@ const DashboardView = ({ currentUser, onLogout, onOpenListModal }) => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this listing?')) return;
     try {
-      const response = await fetch(`http://localhost:5000/api/listings/${id}`, {
+      const response = await fetch(`${API_BASE}/api/listings/${id}`, {
         method: 'DELETE'
       });
       if (!response.ok) {
@@ -90,7 +91,7 @@ const DashboardView = ({ currentUser, onLogout, onOpenListModal }) => {
     }
     setUpdatingProfile(true);
     try {
-      const response = await fetch('http://localhost:5000/api/sellers', {
+      const response = await fetch(`${API_BASE}/api/sellers`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

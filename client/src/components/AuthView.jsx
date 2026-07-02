@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import API_BASE from '../api';
 
 const AuthView = ({ onAuthSuccess, onBackToHome }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -69,7 +70,7 @@ const AuthView = ({ onAuthSuccess, onBackToHome }) => {
     setIsError(false);
 
     try {
-      const res = await fetch('http://localhost:5000/api/auth/google', {
+      const res = await fetch(`${API_BASE}/api/auth/google`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ credential: response.credential })
@@ -111,7 +112,7 @@ const AuthView = ({ onAuthSuccess, onBackToHome }) => {
       const payloadBase64 = btoa(JSON.stringify(payloadObj));
       const mockToken = `${headerBase64}.${payloadBase64}.mocksignature`;
 
-      const res = await fetch('http://localhost:5000/api/auth/google', {
+      const res = await fetch(`${API_BASE}/api/auth/google`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ credential: mockToken })
@@ -147,7 +148,7 @@ const AuthView = ({ onAuthSuccess, onBackToHome }) => {
     setIsError(false);
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch(`${API_BASE}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: loginEmail, password: loginPassword })
@@ -187,7 +188,7 @@ const AuthView = ({ onAuthSuccess, onBackToHome }) => {
     setIsError(false);
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/signup', {
+      const response = await fetch(`${API_BASE}/api/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
