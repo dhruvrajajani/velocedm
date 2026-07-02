@@ -1,8 +1,11 @@
-// Auto-detects the correct API base URL depending on environment.
-// In production (Render), the frontend is served by the same Express server,
-// so we use a relative URL. In local dev (Vite on :5173), we point to localhost:5000.
+// API base URL:
+// - Set VITE_API_URL in Vercel env vars to your Render backend URL (e.g. https://veloce.onrender.com)
+// - Leave VITE_API_URL empty if frontend and backend are on the same server (e.g. Render full-stack)
+// - Falls back to localhost:5000 for local development
 const API_BASE =
-  import.meta.env.MODE === 'production'
+  import.meta.env.VITE_API_URL !== undefined
+    ? import.meta.env.VITE_API_URL
+    : import.meta.env.MODE === 'production'
     ? ''
     : 'http://localhost:5000';
 
